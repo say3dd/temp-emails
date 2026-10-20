@@ -1,6 +1,10 @@
 import requests
+from bs4 import BeautifulSoup
+import os
 
-TOKEN = "placeholder"
+TOKEN=os.getenv("TOKEN")
+
+
 headers = { 
     "Authorization": f"Bearer {TOKEN}" 
 }
