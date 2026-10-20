@@ -1,6 +1,8 @@
 import requests
-from bs4 import BeautifulSoup
 import os
+from datetime import datetime
+from bs4 import BeautifulSoup
+
 
 TOKEN=os.getenv("TOKEN")
 
@@ -31,6 +33,34 @@ def display_email(email_id, headers):
     print(f'From: {email_data.get('from_name', 'Unknown sender')}')
     print(f"Email: {email_data.get('from_addr', 'Unknown address')}")
     print(f"Subject: {email_data.get('subject', '(No subject)')}")
+
+    # Put time into a readable format
+    timestamp = email_data.get('received_at')
+
+    if timestamp:
+        received_at = datetime.fromtimestamp(timestamp / 1000)
+        print(f"Received At: {received_at.strftime('%Y-%m-%d %H:%M:%S')}")
+    else:
+        print("Received At: Unknown")
+
+    email_body = email_data.get('text')
+    # If the email body is in HTML Format:
+    email_body_html = email_data.get('html')
+
+    if email_body and email_body.strip():
+        print(email_body)
+    elif email_body_html and email_body_html.strip():
+        soup = BeautifulSoup(markup=email_body_html, features='html.parser')
+        print(f"{soup.get_text(separator='\n', strip=True)}")
+    else:
+        print("This email has no readable body.")
+    print("-" * 50)
+
+
+
+
+
+
 
 def display_inbox(): 
     try:
