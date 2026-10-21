@@ -61,8 +61,8 @@ def display_email(email_id, headers):
 
 
 
-
-def display_inbox(): 
+# Get inbox
+def display_inbox(headers, seen_ids): 
     try:
         response = requests.get("https://smails.dev/api/mailbox/messages", headers=headers, timeout=(3,10))
 
@@ -85,13 +85,16 @@ def display_inbox():
 
         if email_id and email_id not in seen_ids:
             display_email(email_id, headers);
+            seen_ids.add(email_id)
 
 
 
 try:
-    # req = requests.post('https://smails.dev/api/mailbox', timeout=(3,10))
+    req = requests.post('https://smails.dev/api/mailbox', timeout=(3,10))
 
-    # data = req.json()
+    data = req.json()
+
+    
 
 
 
