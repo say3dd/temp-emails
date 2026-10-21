@@ -94,7 +94,12 @@ try:
 
     data = req.json()
 
-    
+    if isinstance(data, dict):
+        if 'address' in data and 'token' in data:
+            email = data['address']
+            token = data['token']
+            
+
 
 
 
