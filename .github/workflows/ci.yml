@@ -38,6 +38,3 @@ jobs:
       
       - name: Run tests
         run: uv run --locked pytest -v
-
-      - name: Create executable
-        run: py -m PyInstaller --onefile --console --name TempEmail main.py
