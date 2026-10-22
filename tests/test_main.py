@@ -1,6 +1,5 @@
 from unittest.mock import Mock
 import requests
-
 import main
 
 def make_response(data):
@@ -10,7 +9,7 @@ def make_response(data):
     return response
 
 
-def test_display_email_id_prints_message(monkeypatch, capsys):
+def test_display_email_prints_message(monkeypatch, capsys):
     fake_email_data = {
         "from_name": "John Lewis",
         "from_addr": "JL@testing.com",
@@ -26,10 +25,22 @@ def test_display_email_id_prints_message(monkeypatch, capsys):
         lambda *args, **kwargs: make_response(fake_email_data),
     )
 
-    main.display_email_id("message-123", {"Authorization": "Bearer test"})
+    main.display_email("message-123", {"Authorization": "Bearer test"})
     output = capsys.readouterr().out
 
     assert "John Lewis" in output
     assert "JL@testing.com" in output
     assert "hacked!!" in output
     assert "you've been hacked." in output
+
+
+def test_display_email_handles_http_error(monkeypatch, capsys):
+    def mock_get(*args, **kwargs):
+        raise requests.exceptions.Timeout("Request timed out")
+
+    monkeypatch.setattr(main.requests, "get", mock_get)
+
+    main.display_email("message-123", {})
+
+    output = capsys.readouterr().out
+    assert "There was an error" in output
