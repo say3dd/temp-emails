@@ -6,10 +6,22 @@ from bs4 import BeautifulSoup
 
 import websocket
 
+import os 
+import subprocess
+
 URL = "https://smails.dev/api/mailbox"
 
 
-
+def copy_to_clipboard(value):
+    environment = os.environ.copy()
+    environment['CLIPBOARD_TEXT'] = value
+    subprocess.run(
+        ['powershell.exe', '-NoProfile', '-Command', 'Set-Clipboard -Value $env:CLIPBOARD_TEXT'],
+        check=True,
+        capture_output=True,
+        text=True,
+        env=environment,
+    )
 
 # Display an individual email
 def display_email(email_id, headers):
@@ -98,7 +110,7 @@ def main():
                 token = data['token'] 
                 if isinstance(email, str) and isinstance(token, str) and bool(email) and bool(token):
                     print(f'Your email is {email}')
-                    # copy_to_clipboard(email)
+                    copy_to_clipboard(email)
                     print('Email copied to clipboard')
 
                     headers = { 
