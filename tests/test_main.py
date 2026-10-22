@@ -44,3 +44,33 @@ def test_display_email_handles_http_error(monkeypatch, capsys):
 
     output = capsys.readouterr().out
     assert "There was an error" in output
+
+
+def test_check_inbox_processes_new_messages(monkeypatch):
+
+    inbox_data = [{"id" : "message-1"}]
+    email_data = {
+        "from_name": "Alice",
+        "from_addr": "alice@example.com",
+        "subject": "Hello",
+        "text": "Test message",
+    }
+
+    responses = [
+        make_response(inbox_data),
+        make_response(email_data)
+    ]
+
+    
+    monkeypatch.setattr(main.requests, "get", lambda *args, **kwargs: responses.pop(0))
+
+    seen_ids = set()
+
+    main.display_inbox({}, seen_ids)
+
+    assert "message-1" in seen_ids
+
+
+
+
+

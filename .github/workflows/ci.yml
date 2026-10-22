@@ -34,3 +34,6 @@ jobs:
       
       - name: Run linter
         run: uv run --locked ruff check --select E4,E7,E9,F main.py tests
+      
+      - name: Run tests
+        run: uv run --locked pytest -v
