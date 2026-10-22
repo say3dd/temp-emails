@@ -10,6 +10,7 @@ on:
 
 jobs:
   test:
+    name: Windows CI Test suite  
     runs-on: windows-latest
 
     steps:
