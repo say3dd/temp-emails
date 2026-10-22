@@ -66,6 +66,8 @@ def display_email(email_id, headers):
         print("This email has no readable body.")
     print("-" * 50)
 
+    return True
+
 
 
 
